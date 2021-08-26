@@ -1,5 +1,5 @@
 # Macro Deck Web client
-The Macro Deck web client for Macro Deck 2
+The web client for Macro Deck 2. Feel free to improve it ;-)
 
 <a href="http://web.macrodeck.org/" target="_blank">http://web.macrodeck.org/</a>
 

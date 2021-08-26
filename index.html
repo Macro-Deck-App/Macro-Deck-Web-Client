@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		if (location.protocol === 'https:') {
+			location.replace(`http:${location.href.substring(location.protocol.length)}`);
+		}
+	</script>
+    <title>Macro Deck :: Web client</title>
+
+    <meta name="author" content="Manuel Mayer">
+	
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="author" content="Manuel Mayer">
+	<meta name="application-name" content="Macro Deck">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="Macro Deck">
+	<meta name="msapplication-TileColor" content="#454545">
+	<meta name="theme-color" content="#454545">
+	<meta name="apple-mobile-web-app-status-bar-style" content="#454545">
+	<meta name="msapplication-config" content="browserconfig.xml?v=210703071156">
+	<link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-touch-icon-57x57.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-touch-icon-60x60.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="72x72" href="/images/favicon/apple-touch-icon-72x72.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="76x76" href="/images/favicon/apple-touch-icon-76x76.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="114x114" href="/images/favicon/apple-touch-icon-114x114.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="120x120" href="/images/favicon/apple-touch-icon-120x120.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="144x144" href="/images/favicon/apple-touch-icon-144x144.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="152x152" href="/images/favicon/apple-touch-icon-152x152.png?v=210703071156">
+	<link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon-180x180.png?v=210703071156">
+	<link rel="icon" type="image/png" href="/images/favicon/android-chrome-36x36.png?v=210703071156" sizes="36x36">
+	<link rel="icon" type="image/png" href="/images/favicon/android-chrome-48x48.png?v=210703071156" sizes="48x48">
+	<link rel="icon" type="image/png" href="/images/favicon/android-chrome-72x72.png?v=210703071156" sizes="72x72">
+	<link rel="icon" type="image/png" href="/images/favicon/android-chrome-96x96.png?v=210703071156" sizes="96x96">
+	<link rel="icon" type="image/png" href="/images/favicon/android-chrome-144x144.png?v=210703071156" sizes="144x144">
+	<link rel="icon" type="image/png" href="/images/favicon/android-chrome-192x192.png?v=210703071156" sizes="192x192">
+	<link rel="icon" type="image/png" href="/images/favicon/favicon-16x16.png?v=210703071156" sizes="16x16">
+	<link rel="icon" type="image/png" href="/images/favicon/favicon-32x32.png?v=210703071156" sizes="32x32">
+	<link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png?v=210703071156" sizes="96x96">
+	<link rel="shortcut icon" type="image/x-icon" href="/images/favicon/favicon.ico?v=210703071156">
+	<meta name="msapplication-TileImage" content="mstile-150x150.png?v=210703071156">
+	<meta name="msapplication-square70x70logo" content="mstile-70x70.png?v=210703071156">
+	<meta name="msapplication-square150x150logo" content="mstile-150x150.png?v=210703071156">
+	<meta name="msapplication-wide310x150logo" content="mstile-310x150.png?v=210703071156">
+	<meta name="msapplication-square310x310logo" content="mstile-310x310.png?v=210703071156">
+	<link href="/images/favicon/apple-touch-startup-image-320x460.png?v=210703071156" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-640x920.png?v=210703071156" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-640x1096.png?v=210703071156" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-748x1024.png?v=210703071156" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 1) and (orientation: landscape)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-750x1024.png?v=210703071156" media="" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-750x1294.png?v=210703071156" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-768x1004.png?v=210703071156" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 1) and (orientation: portrait)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-1182x2208.png?v=210703071156" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-1242x2148.png?v=210703071156" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-1496x2048.png?v=210703071156" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" rel="apple-touch-startup-image">
+	<link href="/images/favicon/apple-touch-startup-image-1536x2008.png?v=210703071156" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" rel="apple-touch-startup-image">
+	<link rel="manifest" href="manifest.json?v=210703071156" />
+	
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+	
+	<script src="js/jquery-3.5.1.min.js"></script>
+	
+</head>
+<body  onload="" class="bg-dark">
+	<button class="btn btn-danger d-none" id="btn-back" onclick="back()">Back</button>
+	<button class="btn btn-success" id="btn-fullscreen" onclick="openFullscreen()">Fullscreen</button>
+	<div class="connect-container container-fluid animate__animated animate__bounceIn" id="connect-container">
+		<div class="text-center text-white m-3">
+			<div class="text-center p-0 m-0">
+				<div class="row justify-content-md-center container-fluid">
+				  <div class="col col-sm">
+					<a href="https://beta.macrodeck.org/imprint" class="text-white" target="_blank">Imprint</a>
+					|
+					<a href="https://beta.macrodeck.org/privacy" class="text-white" target="_blank">Privacy statement</a>
+					|
+					<a href="https://beta.macrodeck.org/termsofuse" class="text-white" target="_blank">Terms of use</a>
+				  </div>
+					  
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-center align-self-center text-center">
+			<div class="col">
+				<img class="mb-0" src="images/logo.png" alt="" width="300" height="60">
+				<h2 class="mt-0 mb-0 font-weight-normal text-light">Web client (Beta)</h2>
+				<span class="text-light">for Macro Deck version 2</span>
+				
+			</div>
+		</div>
+		<div class="row text-center mt-5 overflow-auto" style="max-width: 1000px; margin: auto;">
+			<div class="col mb-5">
+				<h4 class="pb-2">New connection</h4>
+				<form class="form-connect" name="connect">
+				
+					<div class="row">
+						<div class="col">
+							<label for="inputHost" class="sr-only">Hostname</label>
+							<input type="text" name="inputHost" id="inputHost" class="form-control" placeholder="Hostname" required="" autofocus="">
+						</div>
+						<div class="col-auto">
+							<label for="inputPort" class="sr-only">Port</label>
+							<input style="width: 80px;" type="text" name="inputPort" id="inputPort" class="form-control" placeholder="Port" required="" autofocus="" value="8191">
+						</div>
+					</div>
+					<button class="btn btn-primary mt-2 w-100" type="submit">
+						<span id="button-connect-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+						Connect
+					</button>
+				</form>
+			</div>
+			<div id="col-recent-connections" class="col-md d-none">
+				<h4 class="text-center pb-2">Recent connections</h4>
+				<div id="recent-connections" class="mr-2 ml-2">
+				
+				</div>
+			</div>
+		</div>
+		
+		<h5 class="text-center">Client id: <span id="client-id"></span></h5>
+	</div>
+	
+	<div class="button-container" id="button-container"></div>
+    
+	<div id="cookiealert-modal" data-backdrop="static" data-keyboard="false" class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content bg-dark">
+		  <div class="modal-header text-dark">
+			<h5 class="modal-title">Cookies &#x1F36A;</h5>
+		  </div>
+		  <div class="modal-body text-dark">
+			<p>We care about privacy! This website uses only technically necessary cookies.</p>
+			<a href="https://cookiesandyou.com/" target="_blank">Learn more about cookies</a>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-primary acceptcookies">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	
+	
+</div>
+
+
+
+<script src="js/bootstrap.js"></script>
+<script src="js/client.js"></script>
+<script src="js/cookiealert.js"></script>
+</body>
+

@@ -1,2 +1,2 @@
-# Macro-Deck-Web-Client
-The Macro Deck web client
+# Macro Deck Web client
+The Macro Deck web client for Macro Deck 2

@@ -295,10 +295,9 @@ function autoSize() {
 		var containerWidth = ((buttonSize + (buttonSpacing / 2)) * (divs.length / rows.length));
 		container.setAttribute("style","width:" + containerWidth + "px");
 	} else {
+		buttonSize = (window.innerWidth / (divs.length / rows.length)) - (buttonSpacing * 2);
 		
-		buttonSize = (window.innerWidth / (divs.length / rows.length)) - (buttonSpacing);
-		
-		if ((buttonSize + (buttonSpacing / 2)) * (rows.length) >= (container.offsetHeight)) {
+		if ((buttonSize + (buttonSpacing * 2)) * (rows.length) >= (window.innerHeight - (btnFullscreen.offsetHeight * 2))) {
             buttonSize = ((window.innerHeight - (btnFullscreen.offsetHeight * 2)) / rows.length) - (buttonSpacing + 10);
         }
 

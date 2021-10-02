@@ -192,9 +192,15 @@ function connect(url) {
 				autoSize();
 			} else if (obj.Method == JsonMethod.UPDATE_BUTTON) {
 				var button = document.getElementById(obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
-				if (obj.Buttons[0].Base64Image) {
-					button.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].Base64Image + ')';
+				
+				if (obj.Buttons[0].Icon) {
+					var iconPack = icons.IconPacks.find(iconPack => iconPack.Name == obj.Buttons[0].Icon.split(".")[0]);
+					var icon = iconPack.Icons.find(icon => icon.IconId == obj.Buttons[0].Icon.split(".")[1]);						
+					button.style.backgroundImage = 'url(data:image/gif;base64,' + icon.IconBase64 + ')';
+				} else {
+					button.style.backgroundImage = '';
 				}
+				
 				
 				var label = document.getElementById("label_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
 				if (obj.Buttons[0].Label.LabelBase64) {
@@ -207,13 +213,13 @@ function connect(url) {
 					label.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].Label.LabelBase64 + ')';
 				}
 			} else if (obj.Method == JsonMethod.BUTTON_DONE) {
-				var loader = document.getElementById("loader_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
+				/*var loader = document.getElementById("loader_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
 				loader.setAttribute("style", "border-radius: " + ((buttonRadius / 2) / 100) * (buttonSize) + "px !important;");
 				loader.classList.toggle("button-done", true);
 				setTimeout(function(){
 					loader.classList.toggle("button-done", false);
 					loader.classList.toggle("d-none", true);
-				}, 3000);
+				}, 3000);*/
 				
 			} else if (obj.Method == JsonMethod.GET_ICONS) {
 				icons = obj;
@@ -287,23 +293,33 @@ function autoSize() {
 	var rows = document.getElementsByClassName('row');
 	var container = document.getElementsByClassName('button-container')[0];
 	var btnFullscreen = document.getElementById("btn-fullscreen");
-	if (window.innerHeight - btnFullscreen.offsetHeight > window.innerWidth) {
-		buttonSize = (window.innerWidth / (divs.length / rows.length)) - (buttonSpacing + 10);
-		if ((buttonSize * rows.length) + (buttonSpacing + 10) > window.innerHeight - btnFullscreen.offsetHeight) {
-            buttonSize = (window.innerHeight - btnFullscreen.offsetHeight / (rows.length)) - (buttonSpacing + 10);
-        }
-		var containerWidth = ((buttonSize + (buttonSpacing / 2)) * (divs.length / rows.length));
-		container.setAttribute("style","width:" + containerWidth + "px");
-	} else {
-		buttonSize = (window.innerWidth / (divs.length / rows.length)) - (buttonSpacing * 2);
-		
-		if ((buttonSize + (buttonSpacing * 2)) * (rows.length) >= (window.innerHeight - (btnFullscreen.offsetHeight * 2))) {
-            buttonSize = ((window.innerHeight - (btnFullscreen.offsetHeight * 2)) / rows.length) - (buttonSpacing + 10);
-        }
 
-		var containerWidth = ((buttonSize + (buttonSpacing / 2)) * (divs.length / rows.length));
-		container.setAttribute("style","width:" + containerWidth + "px; ");
+	var offset = 0;
+	if (!document.fullscreenElement) {
+		offset = (buttonSpacing * rows.length) + (btnFullscreen.offsetHeight * 2);
 	}
+	var buttonSize = 100;
+    var rowsCount = rows.length;
+	var columnsCount = (divs.length / rows.length);
+	var	spacing = buttonSpacing;
+    var width = window.innerWidth, height = window.innerHeight - offset; // from panel
+    var buttonSizeX, buttonSizeY; // for convenience
+
+    if (rowsCount > columnsCount) //if NOT "normal case" (ie, user attempting vertical layout), force horizontal
+    {	
+		rowsCount = (divs.length / rows.length);
+        columnsCount = rows.length;
+
+    }
+    buttonSizeX = width / columnsCount; //calc with spacing, remove it after
+    buttonSizeY = height / rowsCount;
+    buttonSize = Math.min(buttonSizeX, buttonSizeY) - spacing
+	
+	
+	
+	var containerWidth = buttonSize * (divs.length / rows.length);
+	container.setAttribute("style","width:" + containerWidth + "px; ");
+
 	
 	for (i = 0; i < divs.length; i++) {
 		divs[i].style.width = buttonSize + "px";
@@ -347,16 +363,16 @@ function getCookie(cname) {
 }
 
 function onMouseDown(id) {
-	if (document.getElementById("loader_" + id)) {
+	/*if (document.getElementById("loader_" + id)) {
 		document.getElementById("loader_" + id).classList.toggle("d-none", true);
 		document.getElementById("loader_" + id).classList.toggle("button-done", false);
 		document.getElementById("loader_" + id).classList.toggle("d-none", false);
-	}
+	}*/
 	if (document.getElementById("col_" + id)) {
-		document.getElementById("col_" + id).classList.add('animate__animated', 'animate__rubberBand');
+		document.getElementById("col_" + id).classList.add('animate__animated', 'animate__pulse');
 		document.getElementById("col_" + id).style.setProperty('--animate-duration', '0.5s');
 		document.getElementById("col_" + id).addEventListener('animationend', () => {
-			document.getElementById("col_" + id).classList.remove('animate__animated', 'animate__rubberBand');
+			document.getElementById("col_" + id).classList.remove('animate__animated', 'animate__pulse');
 		});
 	}
 }

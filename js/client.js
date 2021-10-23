@@ -248,6 +248,7 @@ function generateGrid(columns, rows) {
 	for (var i = 0; i < rows; i++) {
 		var row = document.createElement("div");
 		row.setAttribute("class", "row");
+		row.setAttribute("style", "margin: 0; padding: 0;");
 		buttonContainer.appendChild(row);
 		row.classList.add('animate__animated', 'animate__bounceInLeft');
 		for (var j = 0; j < columns; j++) {
@@ -260,13 +261,11 @@ function generateGrid(columns, rows) {
 			button.classList.add("btn");
 			button.classList.toggle("btn-secondary", buttonBackground);
 			button.setAttribute("id", i + "_" + j);
-			button.addEventListener("click", function() {
-				onClickButton(this.id);
-			});
-			button.addEventListener("mousedown", function() {
+			
+			$(button).bind('touchstart', function() {
 				onMouseDown(this.id);
 			});
-			button.addEventListener("mouseup", function() {
+			$(button).bind('touchend', function() {
 				onMouseUp(this.id);
 			});
 			
@@ -292,40 +291,42 @@ function autoSize() {
 	var divs = document.getElementsByClassName('blockBox');
 	var rows = document.getElementsByClassName('row');
 	var container = document.getElementsByClassName('button-container')[0];
+	
 	var btnFullscreen = document.getElementById("btn-fullscreen");
 
 	var offset = 0;
 	if (!document.fullscreenElement) {
-		offset = (buttonSpacing * rows.length) + (btnFullscreen.offsetHeight * 2);
+		offset = 30 + btnFullscreen.offsetHeight * 2;
 	}
+
 	var buttonSize = 100;
     var rowsCount = rows.length;
 	var columnsCount = (divs.length / rows.length);
-	var	spacing = buttonSpacing;
-    var width = window.innerWidth, height = window.innerHeight - offset; // from panel
-    var buttonSizeX, buttonSizeY; // for convenience
+    var width = window.innerWidth, height = window.innerHeight - offset;
+    var buttonSizeX, buttonSizeY;
 
-    if (rowsCount > columnsCount) //if NOT "normal case" (ie, user attempting vertical layout), force horizontal
+    if (rowsCount > columnsCount)
     {	
 		rowsCount = (divs.length / rows.length);
         columnsCount = rows.length;
 
     }
-    buttonSizeX = width / columnsCount; //calc with spacing, remove it after
+    buttonSizeX = width / columnsCount;
     buttonSizeY = height / rowsCount;
-    buttonSize = Math.min(buttonSizeX, buttonSizeY) - spacing
+    buttonSize = Math.min(buttonSizeX, buttonSizeY);
 	
 	
 	
 	var containerWidth = buttonSize * (divs.length / rows.length);
-	container.setAttribute("style","width:" + containerWidth + "px; ");
+	var containerHeight = buttonSize * (rows.length);
+	container.setAttribute("style","width: " + containerWidth + "px; height: " + containerHeight + "px;");
 
 	
 	for (i = 0; i < divs.length; i++) {
+		divs[i].style.padding = buttonSpacing + "px";
+		divs[i].style.borderRadius = buttonRadius + "px";
 		divs[i].style.width = buttonSize + "px";
 		divs[i].style.height = buttonSize + "px";
-		divs[i].style.margin = (buttonSpacing / 2) + "px";
-		divs[i].style.borderRadius = buttonRadius + "px";
 	}
 	
 	var buttons = document.getElementsByClassName('action-button');
@@ -333,10 +334,6 @@ function autoSize() {
 		buttons[i].style.borderRadius = ((buttonRadius / 2) / 100) * buttonSize + "px";
 	}
 	
-	var loaders = document.getElementsByClassName("loader-container");
-	for (var i = 0; i < loaders.length; i++) {
-		loaders[i].setAttribute("style", "border-radius: " + ((buttonRadius / 2) / 100) * (buttonSize) + "px !important;");
-	}
 }
 
 function setCookie(cname, cvalue, exdays) {
@@ -363,26 +360,21 @@ function getCookie(cname) {
 }
 
 function onMouseDown(id) {
-	/*if (document.getElementById("loader_" + id)) {
-		document.getElementById("loader_" + id).classList.toggle("d-none", true);
-		document.getElementById("loader_" + id).classList.toggle("button-done", false);
-		document.getElementById("loader_" + id).classList.toggle("d-none", false);
-	}*/
 	if (document.getElementById("col_" + id)) {
-		document.getElementById("col_" + id).classList.add('animate__animated', 'animate__pulse');
-		document.getElementById("col_" + id).style.setProperty('--animate-duration', '0.5s');
-		document.getElementById("col_" + id).addEventListener('animationend', () => {
-			document.getElementById("col_" + id).classList.remove('animate__animated', 'animate__pulse');
-		});
+		document.getElementById("col_" + id).classList.toggle('pressed', true);
 	}
+	var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_PRESS }
+	doSend(JSON.stringify(jsonObj));
 }
 
 function onMouseUp(id) {
+	if (document.getElementById("col_" + id)) {
+		document.getElementById("col_" + id).classList.toggle('pressed', false);
+	}
 }
 
 function onClickButton(id) {
-	var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_PRESS }
-	doSend(JSON.stringify(jsonObj));
+	
 }
 
 function doSend(message) {

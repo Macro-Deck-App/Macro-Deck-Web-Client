@@ -1,6 +1,9 @@
-# Macro Deck Web client
-The web client for Macro Deck 2. Feel free to improve it ;-)
+# Macro Deck Web Client for Macro Deck 2
 
-<a href="http://web.macrodeck.org/" target="_blank">http://web.macrodeck.org/</a>
+# Compatible devices
+The Macro Deck Web Client is compatible with almost all browsers that support the newest JavaScript features.
 
-<img height="64px" src="https://macrodeck.org/images/works_with_macrodeck2.png" />
+
+# Third party licenses
+This app uses some awesome 3rd party libraries:
+- [URLSearchParams Polyfill (MIT license)](https://github.com/jerrybendy/url-search-params-polyfill)

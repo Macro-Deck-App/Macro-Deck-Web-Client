@@ -1,5 +1,8 @@
 # Macro Deck Web Client for Macro Deck 2
 
+
+<img height="64px" src="https://macrodeck.org/images/works_with_macrodeck2.png" />
+
 # Compatible devices
 The Macro Deck Web Client is compatible with almost all browsers that support the newest JavaScript features.
 

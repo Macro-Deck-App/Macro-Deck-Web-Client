@@ -3,12 +3,17 @@ var websocket;
 var connected;
 var recentConnections = [];
 var clientId;
-var apiVersion = 20;
 var buttonSpacing = 5;
 var buttonRadius = 40;
 var buttonSize = 100;
 var buttonBackground = false;
 var icons = [];
+var pressTimer;
+var longPress = false;
+var supportButtonReleaseLongPress = false;
+
+var apiVersion = 20;
+var version = "2.1.0";
 
 function back() {
 	disconnect();
@@ -62,6 +67,8 @@ $(document).ready(function () {
 		setCookie("clientId", clientId, 365);
 	}
 	
+	document.getElementById("labelVersion").innerHTML = version;
+
 	document.getElementById("client-id").innerHTML = clientId;
 	
 	if (getCookie("recentConnections")) {
@@ -136,140 +143,156 @@ function connect(url) {
 
 	websocket.onclose = function (e) {
 		connected = false;
+		console.log("Connection closed");
 		window.location.reload(false); 
-
 	};
 
 	websocket.onmessage = function (e) {
 		try {
 			var obj = JSON.parse(e.data);
-			if (obj.Method == JsonMethod.GET_CONFIG) {
-				document.getElementById("connect-container").innerHTML = "";
-				buttonSpacing = obj.ButtonSpacing;
-				buttonRadius = obj.ButtonRadius;
-				buttonBackground = obj.ButtonBackground;
-				generateGrid(obj.Columns, obj.Rows);
-				var jsonObj = { "Method" : JsonMethod.GET_BUTTONS }
-				doSend(JSON.stringify(jsonObj));
-				
-				if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
-					document.getElementById("btn-back").classList.toggle("d-none", false);
-				}
-				
-				if (recentConnections.includes(url) == false) {
-					recentConnections.push(url);
-					setCookie("recentConnections", JSON.stringify(recentConnections), 365);
-				}
-				autoSize();
-			} else if (obj.Method == JsonMethod.GET_BUTTONS) {
-				var actionButtons = document.getElementsByClassName("action-button");
-				var labels = document.getElementsByClassName("label");
-				var loaders = document.getElementsByClassName("loader-container");
-				for (var i = 0; i < actionButtons.length; i++) {
-					actionButtons[i].style.backgroundImage = '';
-					labels[i].style.backgroundImage = '';
-				}
-				for (var i = 0; i < loaders.length; i++) {
-					loaders[i].classList.toggle("d-none", true);
-					loaders[i].setAttribute("style", "border-radius: " + ((buttonRadius / 2) / 100) * (loaders[i].offsetWidth) + "px !important;");
-				}
-				
-				this.buttons = obj.Buttons;
-				for (var i = 0; i < this.buttons.length; i++) {
-					var button = document.getElementById(this.buttons[i].Position_Y + "_" + this.buttons[i].Position_X);
-				
-					if (this.buttons[i] && this.buttons[i].Icon) {
-						var iconPack;
-						var icon;
-
-						if (Array.prototype.find != null) { // using faster find method for supported browser
-							var _buttons = this.buttons;
-
-							iconPack = icons.IconPacks.find(function (e) {
-								return e.Name == _buttons[i].Icon.split(".")[0]
-							});
-
-							icon = iconPack.Icons.find(function (e) {
-								return e.IconId == _buttons[i].Icon.split(".")[1]
-							});
-						} else { // using slower for loop to find the icon for older browsers
-							for (var j = 0; j < icons.IconPacks.length; j++) {
-								if (this.buttons[i].Icon.split(".").length > 0 && icons.IconPacks[j].Name == this.buttons[i].Icon.split(".")[0]) {
-									iconPack = icons.IconPacks[j];
-								}
-							}
-
-							for (var j = 0; j < iconPack.Icons.length; j++) {
-								if (this.buttons[i].Icon.split(".").length > 0 && iconPack.Icons[j].IconId == this.buttons[i].Icon.split(".")[1]) {
-									icon = iconPack.Icons[j];
-								}
-							}
-						}
-						button.style.backgroundImage = 'url(data:image/gif;base64,' + icon.IconBase64 + ')';
+			switch (obj.Method) {
+				case JsonMethod.GET_CONFIG:
+					document.getElementById("connect-container").innerHTML = "";
+					buttonSpacing = obj.ButtonSpacing;
+					buttonRadius = obj.ButtonRadius;
+					buttonBackground = obj.ButtonBackground;
+					if (obj.SupportButtonReleaseLongPress && obj.SupportButtonReleaseLongPress == true) {
+						supportButtonReleaseLongPress = true;
+					}
+					generateGrid(obj.Columns, obj.Rows);
+					var jsonObj = { "Method" : JsonMethod.GET_BUTTONS }
+					doSend(JSON.stringify(jsonObj));
+					
+					if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+						document.getElementById("btn-back").classList.toggle("d-none", false);
 					}
 					
-					var label = document.getElementById("label_" + this.buttons[i].Position_Y + "_" + this.buttons[i].Position_X);
-					if (this.buttons[i].Label.LabelBase64) {
-						label.style.backgroundImage = 'url(data:image/gif;base64,' + this.buttons[i].Label.LabelBase64 + ')';
+					if (recentConnections.includes(url) == false) {
+						recentConnections.push(url);
+						setCookie("recentConnections", JSON.stringify(recentConnections), 365);
 					}
-				}
-				autoSize();
-			} else if (obj.Method == JsonMethod.UPDATE_BUTTON) {
-				var button = document.getElementById(obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
-				
-				if (obj.Buttons[0].Icon) {
-					var iconPack;
-					var icon;
+					autoSize();
+					break;
+				case JsonMethod.GET_BUTTONS:
+					var actionButtons = document.getElementsByClassName("action-button");
+					var labels = document.getElementsByClassName("label");
+					var loaders = document.getElementsByClassName("loader-container");
+					for (var i = 0; i < actionButtons.length; i++) {
+						actionButtons[i].style.backgroundImage = '';
+						labels[i].style.backgroundImage = '';
+					}
+					for (var i = 0; i < loaders.length; i++) {
+						loaders[i].classList.toggle("d-none", true);
+						loaders[i].setAttribute("style", "border-radius: " + ((buttonRadius / 2) / 100) * (loaders[i].offsetWidth) + "px !important;");
+					}
+					
+					this.buttons = obj.Buttons;
+					for (var i = 0; i < this.buttons.length; i++) {
+						var button = document.getElementById(this.buttons[i].Position_Y + "_" + this.buttons[i].Position_X);
+						
+						if (button) {
+							if (this.buttons[i] && this.buttons[i].Icon) {
+								var iconPack;
+								var icon;
 
-					if (Array.prototype.find != null) { // using faster find method to find the icon for supported browsers
-						iconPack = icons.IconPacks.find(function (e) {
-							return e.Name == obj.Buttons[0].Icon.split(".")[0]
-						});
+								if (Array.prototype.find != null) { // using faster find method for supported browser
+									var _buttons = this.buttons;
 
-						icon = iconPack.Icons.find(function (e) {
-							return e.IconId == obj.Buttons[0].Icon.split(".")[1]
-						});
-					} else { // using slower for loop to find the icon for older browsers
-						for (var j = 0; j < icons.IconPacks.length; j++) {
-							if (obj.Buttons[0].Icon.split(".").length > 0 && icons.IconPacks[j].Name == obj.Buttons[0].Icon.split(".")[0]) {
-								iconPack = icons.IconPacks[j];
+									iconPack = icons.IconPacks.find(function (e) {
+										return e.Name == _buttons[i].Icon.split(".")[0]
+									});
+
+									icon = iconPack.Icons.find(function (e) {
+										return e.IconId == _buttons[i].Icon.split(".")[1]
+									});
+								} else { // using slower for loop to find the icon for older browsers
+									for (var j = 0; j < icons.IconPacks.length; j++) {
+										if (this.buttons[i].Icon.split(".").length > 0 && icons.IconPacks[j].Name == this.buttons[i].Icon.split(".")[0]) {
+											iconPack = icons.IconPacks[j];
+										}
+									}
+
+									for (var j = 0; j < iconPack.Icons.length; j++) {
+										if (this.buttons[i].Icon.split(".").length > 0 && iconPack.Icons[j].IconId == this.buttons[i].Icon.split(".")[1]) {
+											icon = iconPack.Icons[j];
+										}
+									}
+								}
+								button.style.backgroundImage = 'url(data:image/gif;base64,' + icon.IconBase64 + ')';
 							}
 						}
-
-						for (var j = 0; j < iconPack.Icons.length; j++) {
-							if (obj.Buttons[0].Icon.split(".").length > 0 && iconPack.Icons[j].IconId == obj.Buttons[0].Icon.split(".")[1]) {
-								icon = iconPack.Icons[j];
+						
+						var label = document.getElementById("label_" + this.buttons[i].Position_Y + "_" + this.buttons[i].Position_X);
+						if (label) {
+							if (this.buttons[i].Label && this.buttons[i].Label.LabelBase64) {
+								label.style.backgroundImage = 'url(data:image/gif;base64,' + this.buttons[i].Label.LabelBase64 + ')';
+							}
+							if (this.buttons[i].LabelBase64) {
+								label.style.backgroundImage = 'url(data:image/gif;base64,' + this.buttons[i].LabelBase64 + ')';
 							}
 						}
 					}
-					button.style.backgroundImage = 'url(data:image/gif;base64,' + icon.IconBase64 + ')';
-				} else {
-					button.style.backgroundImage = '';
-				}
-				
-				
-				var label = document.getElementById("label_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
-				if (obj.Buttons[0].Label.LabelBase64) {
-					label.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].Label.LabelBase64 + ')';
-				}
-				
-			} else if (obj.Method == JsonMethod.UPDATE_LABEL) {
-				var label = document.getElementById("label_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
-				if (obj.Buttons[0].Label.LabelBase64) {
-					label.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].Label.LabelBase64 + ')';
-				}
-			} else if (obj.Method == JsonMethod.BUTTON_DONE) {
-				/*var loader = document.getElementById("loader_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
-				loader.setAttribute("style", "border-radius: " + ((buttonRadius / 2) / 100) * (buttonSize) + "px !important;");
-				loader.classList.toggle("button-done", true);
-				setTimeout(function(){
-					loader.classList.toggle("button-done", false);
-					loader.classList.toggle("d-none", true);
-				}, 3000);*/
-				
-			} else if (obj.Method == JsonMethod.GET_ICONS) {
-				icons = obj;
+					autoSize();
+					break;
+				case JsonMethod.UPDATE_BUTTON:
+					var button = document.getElementById(obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
+					
+					if (button) {
+						if (obj.Buttons[0].Icon) {
+							var iconPack;
+							var icon;
+
+							if (Array.prototype.find != null) { // using faster find method to find the icon for supported browsers
+								iconPack = icons.IconPacks.find(function (e) {
+									return e.Name == obj.Buttons[0].Icon.split(".")[0]
+								});
+
+								icon = iconPack.Icons.find(function (e) {
+									return e.IconId == obj.Buttons[0].Icon.split(".")[1]
+								});
+							} else { // using slower for loop to find the icon for older browsers
+								for (var j = 0; j < icons.IconPacks.length; j++) {
+									if (obj.Buttons[0].Icon.split(".").length > 0 && icons.IconPacks[j].Name == obj.Buttons[0].Icon.split(".")[0]) {
+										iconPack = icons.IconPacks[j];
+									}
+								}
+
+								for (var j = 0; j < iconPack.Icons.length; j++) {
+									if (obj.Buttons[0].Icon.split(".").length > 0 && iconPack.Icons[j].IconId == obj.Buttons[0].Icon.split(".")[1]) {
+										icon = iconPack.Icons[j];
+									}
+								}
+							}
+							button.style.backgroundImage = 'url(data:image/gif;base64,' + icon.IconBase64 + ')';
+						} else {
+							button.style.backgroundImage = '';
+						}
+					}
+					
+					var label = document.getElementById("label_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
+					if (label) {
+						if (obj.Buttons[0].Label && obj.Buttons[0].Label.LabelBase64) {
+							label.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].Label.LabelBase64 + ')';
+						}
+						if (obj.Buttons[0].LabelBase64) {
+							label.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].LabelBase64 + ')';
+						}
+					}
+					break;
+				case JsonMethod.UPDATE_LABEL:
+					var label = document.getElementById("label_" + obj.Buttons[0].Position_Y + "_" + obj.Buttons[0].Position_X);
+					if (obj.Buttons[0].Label && obj.Buttons[0].Label.LabelBase64) {
+						label.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].Label.LabelBase64 + ')';
+					}
+					if (obj.Buttons[0].LabelBase64) {
+						label.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].LabelBase64 + ')';
+					}
+					break;
+				case JsonMethod.GET_ICONS:
+					icons = obj;
+					break;
 			}
+			
 		} catch(err) {
 			console.log(err);
 			if (document.getElementById("button-connect-spinner")) {
@@ -309,12 +332,18 @@ function generateGrid(columns, rows) {
 			button.setAttribute("id", i + "_" + j);
 			
 			$(button).bind('touchstart', function() {
-				onMouseDown(this.id);
+				onTouchStart(this.id);
 			});
 			$(button).bind('touchend', function() {
+				onTouchEnd(this.id);
+			});
+			$(button).mousedown(function(){
+				onMouseDown(this.id);
+			});
+			$(button).mouseup(function(){
 				onMouseUp(this.id);
 			});
-			
+						
 			var label = document.createElement("div");
 			label.setAttribute("id", "label_" + i + "_" + j);
 			label.classList.add("label");
@@ -405,7 +434,35 @@ function getCookie(cname) {
     return "";
 }
 
+function onTouchStart(id) {
+	if (!IsTouchDevice()) return;
+	buttonPress(id);
+}
+
+function onTouchEnd(id) {
+	if (!IsTouchDevice()) return;
+	buttonPressRelease(id);
+}
+
 function onMouseDown(id) {
+	if (IsTouchDevice()) return;
+	buttonPress(id);
+}
+
+function onMouseUp(id) {
+	if (IsTouchDevice()) return;
+	buttonPressRelease(id);
+}
+
+function buttonPress(id) {
+	longPress = false;
+	pressTimer = window.setTimeout(function() {
+		longPress = true;
+		var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_LONG_PRESS }
+		if (supportButtonReleaseLongPress) {
+			doSend(JSON.stringify(jsonObj));
+		}
+	},1000);
 	if (document.getElementById("col_" + id)) {
 		document.getElementById("col_" + id).classList.toggle('pressed', true);
 	}
@@ -413,29 +470,41 @@ function onMouseDown(id) {
 	doSend(JSON.stringify(jsonObj));
 }
 
-function onMouseUp(id) {
+function buttonPressRelease(id) {
+	clearTimeout(pressTimer);
 	if (document.getElementById("col_" + id)) {
 		document.getElementById("col_" + id).classList.toggle('pressed', false);
 	}
+
+	var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_RELEASE }
+	if (longPress) {
+		jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_LONG_PRESS_RELEASE }
+	}
+	if (supportButtonReleaseLongPress) {
+		doSend(JSON.stringify(jsonObj));
+	}
 }
 
-function onClickButton(id) {
-	
-}
 
 function doSend(message) {
     websocket.send(message);
 }
 
+function IsTouchDevice() {
+	return 'ontouchstart' in window || navigator.msMaxTouchPoints;
+}
+
 var JsonMethod = {
 	CONNECTED: "CONNECTED",
     GET_CONFIG: "GET_CONFIG",
-    BUTTON_PRESS: "BUTTON_PRESS",
     GET_BUTTONS: "GET_BUTTONS",
 	UPDATE_BUTTON: "UPDATE_BUTTON",
 	UPDATE_LABEL: "UPDATE_LABEL",
 	BUTTON_DONE: "BUTTON_DONE",
 	REQUEST_PIN: "REQUEST_PIN",
 	GET_ICONS: "GET_ICONS",
-	
+    BUTTON_PRESS: "BUTTON_PRESS",
+    BUTTON_LONG_PRESS: "BUTTON_LONG_PRESS",
+	BUTTON_RELEASE: "BUTTON_RELEASE",
+	BUTTON_LONG_PRESS_RELEASE: "BUTTON_LONG_PRESS_RELEASE"
 }

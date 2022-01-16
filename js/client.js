@@ -13,7 +13,7 @@ var longPress = false;
 var supportButtonReleaseLongPress = false;
 
 var apiVersion = 20;
-var version = "2.1.0";
+var version = "2.1.1";
 
 function back() {
 	disconnect();
@@ -380,12 +380,6 @@ function autoSize() {
     var width = window.innerWidth, height = window.innerHeight - offset;
     var buttonSizeX, buttonSizeY;
 
-    if (rowsCount > columnsCount)
-    {	
-		rowsCount = (divs.length / rows.length);
-        columnsCount = rows.length;
-
-    }
     buttonSizeX = width / columnsCount;
     buttonSizeY = height / rowsCount;
     buttonSize = Math.min(buttonSizeX, buttonSizeY);

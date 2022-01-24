@@ -3,6 +3,8 @@ var websocket;
 var connected;
 var recentConnections = [];
 var clientId;
+var rows = 3;
+var columns = 5;
 var buttonSpacing = 5;
 var buttonRadius = 40;
 var buttonSize = 100;
@@ -11,9 +13,10 @@ var icons = [];
 var pressTimer;
 var longPress = false;
 var supportButtonReleaseLongPress = false;
+var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.1.1";
+var version = "2.2.0";
 
 function back() {
 	disconnect();
@@ -26,6 +29,14 @@ function disconnect() {
 		websocket.close();
 	}
 }
+
+$( window ).resize(function() {
+	autoSize();
+});
+
+$(window).on("orientationchange", function (event) {
+	autoSize();
+});
 
 function openFullscreen() {
 	var elem = document.documentElement;
@@ -153,13 +164,19 @@ function connect(url) {
 			switch (obj.Method) {
 				case JsonMethod.GET_CONFIG:
 					document.getElementById("connect-container").innerHTML = "";
+					columns = obj.Columns;
+					rows = obj.Rows;
 					buttonSpacing = obj.ButtonSpacing;
 					buttonRadius = obj.ButtonRadius;
 					buttonBackground = obj.ButtonBackground;
 					if (obj.SupportButtonReleaseLongPress && obj.SupportButtonReleaseLongPress == true) {
 						supportButtonReleaseLongPress = true;
 					}
-					generateGrid(obj.Columns, obj.Rows);
+
+					if (!buttonsGenerated) {
+						document.getElementById("button-container").innerHTML = '<div class="d-flex align-items-center justify-content-center" style="height: 500px;"><h1>Downloading icon packs and buttons... <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span></h1></div>';
+					}
+
 					var jsonObj = { "Method" : JsonMethod.GET_BUTTONS }
 					doSend(JSON.stringify(jsonObj));
 					
@@ -174,16 +191,15 @@ function connect(url) {
 					autoSize();
 					break;
 				case JsonMethod.GET_BUTTONS:
+					if (!buttonsGenerated) {
+						buttonsGenerated = true;
+						generateGrid(columns, rows);
+					}
 					var actionButtons = document.getElementsByClassName("action-button");
 					var labels = document.getElementsByClassName("label");
-					var loaders = document.getElementsByClassName("loader-container");
 					for (var i = 0; i < actionButtons.length; i++) {
 						actionButtons[i].style.backgroundImage = '';
 						labels[i].style.backgroundImage = '';
-					}
-					for (var i = 0; i < loaders.length; i++) {
-						loaders[i].classList.toggle("d-none", true);
-						loaders[i].setAttribute("style", "border-radius: " + ((buttonRadius / 2) / 100) * (loaders[i].offsetWidth) + "px !important;");
 					}
 					
 					this.buttons = obj.Buttons;
@@ -319,7 +335,6 @@ function generateGrid(columns, rows) {
 		row.setAttribute("class", "row");
 		row.setAttribute("style", "margin: 0; padding: 0;");
 		buttonContainer.appendChild(row);
-		row.classList.add('animate__animated', 'animate__bounceInLeft');
 		for (var j = 0; j < columns; j++) {
 			var column = document.createElement("div");
 			column.setAttribute("id", "col_" + i + "_" + j);
@@ -459,6 +474,7 @@ function buttonPress(id) {
 	},1000);
 	if (document.getElementById("col_" + id)) {
 		document.getElementById("col_" + id).classList.toggle('pressed', true);
+		document.getElementById("col_" + id).classList.toggle('release-transition', false);
 	}
 	var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_PRESS }
 	doSend(JSON.stringify(jsonObj));
@@ -468,6 +484,7 @@ function buttonPressRelease(id) {
 	clearTimeout(pressTimer);
 	if (document.getElementById("col_" + id)) {
 		document.getElementById("col_" + id).classList.toggle('pressed', false);
+		document.getElementById("col_" + id).classList.toggle('release-transition', true);
 	}
 
 	var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_RELEASE }

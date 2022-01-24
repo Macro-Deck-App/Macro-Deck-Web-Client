@@ -1,6 +1,3 @@
-html {
-} 
-
 body {
 	padding: 10px;
 }
@@ -12,6 +9,10 @@ p, h1, h2, h3, h4, h5, h6, label {
 
 .pressed {
 	transform: scale(0.9);
+}
+
+.release-transition {
+	transition: all .3s linear;
 }
 
 .blockBox {

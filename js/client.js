@@ -16,7 +16,7 @@ var supportButtonReleaseLongPress = false;
 var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.2.0";
+var version = "2.3.0";
 
 function back() {
 	disconnect();
@@ -206,8 +206,8 @@ function connect(url) {
 					for (var i = 0; i < this.buttons.length; i++) {
 						var button = document.getElementById(this.buttons[i].Position_Y + "_" + this.buttons[i].Position_X);
 						
-						if (button) {
-							if (this.buttons[i] && this.buttons[i].Icon) {
+						if (button && this.buttons[i]) {
+							if (this.buttons[i].Icon) {
 								var iconPack;
 								var icon;
 
@@ -235,7 +235,10 @@ function connect(url) {
 									}
 								}
 								button.style.backgroundImage = 'url(data:image/gif;base64,' + icon.IconBase64 + ')';
+							} else if (this.buttons[i].IconBase64) {
+								button.style.backgroundImage = 'url(data:image/gif;base64,' + this.buttons[i].IconBase64 + ')';
 							}
+
 						}
 						
 						var label = document.getElementById("label_" + this.buttons[i].Position_Y + "_" + this.buttons[i].Position_X);
@@ -280,6 +283,8 @@ function connect(url) {
 								}
 							}
 							button.style.backgroundImage = 'url(data:image/gif;base64,' + icon.IconBase64 + ')';
+						} else if (obj.Buttons[0].IconBase64) {
+							button.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].IconBase64 + ')';
 						} else {
 							button.style.backgroundImage = '';
 						}

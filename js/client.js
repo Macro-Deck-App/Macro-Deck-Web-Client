@@ -16,7 +16,7 @@ var supportButtonReleaseLongPress = false;
 var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.3.0";
+var version = "2.3.1";
 
 function back() {
 	disconnect();
@@ -161,9 +161,16 @@ function connect(url) {
 	websocket.onmessage = function (e) {
 		try {
 			var obj = JSON.parse(e.data);
+			console.log(obj);
 			switch (obj.Method) {
 				case JsonMethod.GET_CONFIG:
 					document.getElementById("connect-container").innerHTML = "";
+					if (obj.Columns !== columns || obj.Rows !== rows || obj.ButtonBackground != buttonBackground) {
+						buttonsGenerated = false;
+						columns = obj.Columns;
+						rows = obj.Rows;
+						buttonBackground = obj.ButtonBackground;
+					}
 					columns = obj.Columns;
 					rows = obj.Rows;
 					buttonSpacing = obj.ButtonSpacing;
@@ -171,10 +178,6 @@ function connect(url) {
 					buttonBackground = obj.ButtonBackground;
 					if (obj.SupportButtonReleaseLongPress && obj.SupportButtonReleaseLongPress == true) {
 						supportButtonReleaseLongPress = true;
-					}
-
-					if (!buttonsGenerated) {
-						document.getElementById("button-container").innerHTML = '<div class="d-flex align-items-center justify-content-center" style="height: 500px;"><h1>Downloading icon packs and buttons... <span class="spinner-border spinner-border-lg" role="status" aria-hidden="true"></span></h1></div>';
 					}
 
 					var jsonObj = { "Method" : JsonMethod.GET_BUTTONS }

@@ -35,9 +35,6 @@ p, h1, h2, h3, h4, h5, h6, label {
 	background-repeat: no-repeat;
 }
 
-.btn:hover {
-	background-color: #232323!important;
-}
 
 .btn:active {
 	outline: none!important;

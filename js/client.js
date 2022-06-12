@@ -16,7 +16,17 @@ var supportButtonReleaseLongPress = false;
 var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.3.1";
+var version = "2.4.0";
+
+function getPWADisplayMode() {
+	const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+	if (document.referrer.startsWith('android-app://')) {
+	  return 'twa';
+	} else if (navigator.standalone || isStandalone) {
+	  return 'standalone';
+	}
+	return 'browser';
+  }
 
 function back() {
 	disconnect();
@@ -50,7 +60,7 @@ function openFullscreen() {
 }
 
 $( window ).resize(function() {
-	if (!document.fullscreenElement) {
+/*	if (!document.fullscreenElement) {
 		if (connected) {
 			document.getElementById("btn-back").classList.toggle("d-none", false);
 		}
@@ -58,7 +68,7 @@ $( window ).resize(function() {
 	} else {
 		document.getElementById("btn-back").classList.toggle("d-none", true);
 		document.getElementById("btn-fullscreen").classList.toggle("d-none", true);
-	}
+	}*/
 	autoSize();
 });
 
@@ -167,9 +177,6 @@ function connect(url) {
 					document.getElementById("connect-container").innerHTML = "";
 					if (obj.Columns !== columns || obj.Rows !== rows || obj.ButtonBackground != buttonBackground) {
 						buttonsGenerated = false;
-						columns = obj.Columns;
-						rows = obj.Rows;
-						buttonBackground = obj.ButtonBackground;
 					}
 					columns = obj.Columns;
 					rows = obj.Rows;
@@ -202,6 +209,7 @@ function connect(url) {
 					var labels = document.getElementsByClassName("label");
 					for (var i = 0; i < actionButtons.length; i++) {
 						actionButtons[i].style.backgroundImage = '';
+						actionButtons[i].classList.toggle("btn-secondary", true);
 						labels[i].style.backgroundImage = '';
 					}
 					
@@ -242,6 +250,12 @@ function connect(url) {
 								button.style.backgroundImage = 'url(data:image/gif;base64,' + this.buttons[i].IconBase64 + ')';
 							}
 
+
+							button.classList.toggle("btn-secondary", !this.buttons[i].BackgroundColorHex);
+
+							if (this.buttons[i].BackgroundColorHex) {
+								button.style.backgroundColor = this.buttons[i].BackgroundColorHex;
+							}
 						}
 						
 						var label = document.getElementById("label_" + this.buttons[i].Position_Y + "_" + this.buttons[i].Position_X);
@@ -253,6 +267,7 @@ function connect(url) {
 								label.style.backgroundImage = 'url(data:image/gif;base64,' + this.buttons[i].LabelBase64 + ')';
 							}
 						}
+
 					}
 					autoSize();
 					break;
@@ -290,6 +305,12 @@ function connect(url) {
 							button.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].IconBase64 + ')';
 						} else {
 							button.style.backgroundImage = '';
+						}
+
+						button.classList.toggle("btn-secondary", !obj.Buttons[0].BackgroundColorHex);
+
+						if (obj.Buttons[0].BackgroundColorHex) {
+							button.style.backgroundColor = obj.Buttons[0].BackgroundColorHex;
 						}
 					}
 					
@@ -348,9 +369,8 @@ function generateGrid(columns, rows) {
 			column.setAttribute("id", "col_" + i + "_" + j);
 			column.classList.add("col");
 			column.classList.add("blockBox");
-			var button = document.createElement("button");
+			var button = document.createElement("div");
 			button.classList.add("action-button");
-			button.classList.add("btn");
 			button.classList.toggle("btn-secondary", buttonBackground);
 			button.setAttribute("id", i + "_" + j);
 			
@@ -390,17 +410,17 @@ function autoSize() {
 	var rows = document.getElementsByClassName('row');
 	var container = document.getElementsByClassName('button-container')[0];
 	
-	var btnFullscreen = document.getElementById("btn-fullscreen");
+	//var btnFullscreen = document.getElementById("btn-fullscreen");
 
-	var offset = 0;
+	/*var offset = 0;
 	if (!document.fullscreenElement) {
 		offset = 30 + btnFullscreen.offsetHeight * 2;
-	}
+	}*/
 
 	var buttonSize = 100;
     var rowsCount = rows.length;
 	var columnsCount = (divs.length / rows.length);
-    var width = window.innerWidth, height = window.innerHeight - offset;
+    var width = window.innerWidth, height = window.innerHeight;
     var buttonSizeX, buttonSizeY;
 
     buttonSizeX = width / columnsCount;

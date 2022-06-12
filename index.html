@@ -65,11 +65,20 @@
 	
 	<script src="js/url-search-params-polyfill.js"></script>
 	<script src="js/jquery-3.5.1.min.js"></script>
+	<script>
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/service-worker.js');
+		}
+		try {
+			navigator.wakeLock.request("screen");
+			alert("Screen Wake Lock is active");
+		} catch (err) {
+			alert(err);
+		}
+	</script>
 	
 </head>
 <body  onload="" class="bg-dark">
-	<button class="btn btn-danger d-none" id="btn-back" onclick="back()">Back</button>
-	<button class="btn btn-success" id="btn-fullscreen" onclick="openFullscreen()">Fullscreen</button>
 	<div class="connect-container container-fluid animate__animated animate__fadeIn" id="connect-container">
 		<div class="text-center text-white m-3">
 			<div class="text-center p-0 m-0">

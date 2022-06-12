@@ -18,6 +18,8 @@ var buttonsGenerated = false;
 var apiVersion = 20;
 var version = "2.4.0";
 
+var noSleep = new NoSleep();
+
 function getPWADisplayMode() {
 	const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
 	if (document.referrer.startsWith('android-app://')) {
@@ -75,6 +77,7 @@ $( window ).resize(function() {
 $(document).ready(function () {	
 	$('form[name="connect"]').on("submit", function (e) {
 		e.preventDefault();
+		noSleep.enable();
 		var host = $(this).find('input[name="inputHost"]');
 		var port = $(this).find('input[name="inputPort"]');
 		

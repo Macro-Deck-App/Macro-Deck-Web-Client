@@ -91,7 +91,8 @@ $(document).ready(function () {
 		setCookie("clientId", clientId, 365);
 	}
 	
-	document.getElementById("labelVersion").innerHTML = version;
+	document.getElementById("labelVersion").innerHTML = ((getPWADisplayMode() === "twa" || getPWADisplayMode() === "standalone") ? "Web App" : "Browser app") + " " + version;
+	document.getElementById("info-install-pwa").classList.toggle("d-none", getPWADisplayMode() !== "browser");
 
 	document.getElementById("client-id").innerHTML = clientId;
 	

@@ -6,10 +6,10 @@
 			location.replace(`http:${location.href.substring(location.protocol.length)}`);
 		}
 	</script>
-    <title>Macro Deck :: Web client</title>
+	<title>Macro Deck :: Web client</title>
 
-    <meta name="author" content="Manuel Mayer">
-	
+	<meta name="author" content="Manuel Mayer">
+
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -58,107 +58,106 @@
 	<link href="/images/favicon/apple-touch-startup-image-1496x2048.png?v=210703071156" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" rel="apple-touch-startup-image">
 	<link href="/images/favicon/apple-touch-startup-image-1536x2008.png?v=210703071156" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" rel="apple-touch-startup-image">
 	<link rel="manifest" href="manifest.json?v=210703071156" />
-	
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-	
+
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<link href="css/animate.css" rel="stylesheet">
+
+	<script src="js/NoSleep.min.js"></script>
 	<script src="js/url-search-params-polyfill.js"></script>
 	<script src="js/jquery-3.5.1.min.js"></script>
-	
+
 </head>
-<body  onload="" class="bg-dark">
-	<button class="btn btn-danger d-none" id="btn-back" onclick="back()">Back</button>
-	<button class="btn btn-success" id="btn-fullscreen" onclick="openFullscreen()">Fullscreen</button>
-	<div class="connect-container container-fluid animate__animated animate__fadeIn" id="connect-container">
-		<div class="text-center text-white m-3">
-			<div class="text-center p-0 m-0">
-				<div class="row justify-content-md-center container-fluid">
-				  <div class="col col-sm">
-					<a href="https://beta.macrodeck.org/imprint" class="text-white" target="_blank">Imprint</a>
-					|
-					<a href="https://beta.macrodeck.org/privacy" class="text-white" target="_blank">Privacy statement</a>
-					|
-					<a href="https://beta.macrodeck.org/termsofuse" class="text-white" target="_blank">Terms of use</a>
-				  </div>
+	<body onload="" class="bg-dark">
+		<button class="btn btn-danger d-none" id="btn-back" onclick="back()">Back</button>
+		<button class="btn btn-success" id="btn-fullscreen" onclick="openFullscreen()">Fullscreen</button>
+		<div class="connect-container container-fluid animate__animated animate__fadeIn" id="connect-container">
+			<div class="text-center text-white m-3">
+				<div class="text-center p-0 m-0">
+					<div class="row justify-content-md-center container-fluid">
+					  <div class="col col-sm">
+						<a href="https://beta.macrodeck.org/imprint" class="text-white" target="_blank">Imprint</a>
+						|
+						<a href="https://beta.macrodeck.org/privacy" class="text-white" target="_blank">Privacy statement</a>
+						|
+						<a href="https://beta.macrodeck.org/termsofuse" class="text-white" target="_blank">Terms of use</a>
+					  </div>
 					  
-				</div>
-			</div>
-		</div>
-		<div class="row justify-content-center align-self-center text-center">
-			<div class="col">
-				<img class="mb-0" src="images/logo.png" alt="" width="300" height="60">
-				
-			</div>
-		</div>
-		<div class="row text-center mt-5 overflow-auto" style="max-width: 1000px; margin: auto;">
-			<div class="col mb-5">
-				<h4 class="pb-2">New connection</h4>
-				<form class="form-connect" name="connect">
-				
-					<div class="row">
-						<div class="col">
-							<label for="inputHost" class="sr-only">IP address/hostname</label>
-							<input type="text" name="inputHost" id="inputHost" class="form-control" placeholder="IP address/hostname" required="" autofocus="">
-						</div>
-						<div class="col-auto">
-							<label for="inputPort" class="sr-only">Port</label>
-							<input style="width: 80px;" type="text" name="inputPort" id="inputPort" class="form-control" placeholder="Port" required="" autofocus="" value="8191">
-						</div>
 					</div>
-					<button class="btn btn-primary mt-2 w-100" type="submit">
-						<span id="button-connect-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-						Connect
-					</button>
-				</form>
+				</div>
 			</div>
-			<div id="col-recent-connections" class="col-md d-none">
-				<h4 class="text-center pb-2">Recent connections</h4>
-				<div id="recent-connections" class="mr-2 ml-2">
+			<div class="row justify-content-center align-self-center text-center">
+				<div class="col">
+					<img class="mb-0" src="images/logo.png" alt="" width="300" height="60">
 				
 				</div>
 			</div>
-		</div>
-		<div class="text-center text-white m-3">
-			<div class="text-center p-0 m-0">
-				<div class="row justify-content-md-center container-fluid">
-				  <div class="col col-sm">
-					<h5 class="mt-0 mb-0 font-weight-normal text-light">Web client <span id="labelVersion"></span> | Client id: <span id="client-id"></span></h5>
-					 
-				  </div>
-					  
+			<div class="row text-center mt-5 overflow-auto" style="max-width: 1000px; margin: auto;">
+				<div class="col mb-5">
+					<h4 class="pb-2">New connection</h4>
+					<form class="form-connect" name="connect">
+				
+						<div class="row">
+							<div class="col">
+								<label for="inputHost" class="sr-only">IP address/hostname</label>
+								<input type="text" name="inputHost" id="inputHost" class="form-control" placeholder="IP address/hostname" required="" autofocus="">
+							</div>
+							<div class="col-auto">
+								<label for="inputPort" class="sr-only">Port</label>
+								<input style="width: 80px;" type="text" name="inputPort" id="inputPort" class="form-control" placeholder="Port" required="" autofocus="" value="8191">
+							</div>
+						</div>
+						<button class="btn btn-primary mt-2 w-100" type="submit">
+							<span id="button-connect-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+							Connect
+						</button>
+					</form>
+				</div>
+				<div id="col-recent-connections" class="col-md d-none">
+					<h4 class="text-center pb-2">Recent connections</h4>
+					<div id="recent-connections" class="mr-2 ml-2">
+				
+					</div>
 				</div>
 			</div>
-		</div>
+			<div class="text-center text-white m-3">
+				<div class="text-center p-0 m-0">
+					<div class="row justify-content-md-center container-fluid">
+					  <div class="col col-sm">
+						<h5 class="mt-0 mb-0 font-weight-normal text-light">Web client <span id="labelVersion"></span> | Client id: <span id="client-id"></span></h5>
+					 
+					  </div>
+					  
+					</div>
+				</div>
+			</div>
 		
-	</div>
+		</div>
 	
-	<div class="button-container" id="button-container"></div>
+		<div class="button-container" id="button-container"></div>
     
-	<div id="cookiealert-modal" data-backdrop="static" data-keyboard="false" class="modal fade" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
-		<div class="modal-content bg-dark">
-		  <div class="modal-header text-dark">
-			<h5 class="modal-title">Cookies &#x1F36A;</h5>
-		  </div>
-		  <div class="modal-body text-dark">
-			<p>We care about privacy! This website uses only technically necessary cookies.</p>
-			<a href="https://cookiesandyou.com/" target="_blank">Learn more about cookies</a>
-		  </div>
-		  <div class="modal-footer">
-			<button type="button" class="btn btn-primary acceptcookies">Close</button>
+		<div id="cookiealert-modal" data-backdrop="static" data-keyboard="false" class="modal fade" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+			<div class="modal-content bg-dark">
+			  <div class="modal-header text-dark">
+				<h5 class="modal-title">Cookies &#x1F36A;</h5>
+			  </div>
+			  <div class="modal-body text-dark">
+				<p>We care about privacy! This website uses only technically necessary cookies.</p>
+				<a href="https://cookiesandyou.com/" target="_blank">Learn more about cookies</a>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-primary acceptcookies">Close</button>
+			  </div>
+			</div>
 		  </div>
 		</div>
-	  </div>
-	</div>
 	
 	
-</div>
 
 
-
-<script src="js/bootstrap.js"></script>
-<script src="js/client.js"></script>
-<script src="js/cookiealert.js"></script>
-</body>
-
+		<script src="js/bootstrap.js"></script>
+		<script src="js/client.js"></script>
+		<script src="js/cookiealert.js"></script>
+	</body>
+</html>

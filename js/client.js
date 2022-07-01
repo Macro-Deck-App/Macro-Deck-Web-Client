@@ -16,7 +16,7 @@ var supportButtonReleaseLongPress = false;
 var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.3.1";
+var version = "2.4.0";
 
 function back() {
 	disconnect();
@@ -202,6 +202,7 @@ function connect(url) {
 					var labels = document.getElementsByClassName("label");
 					for (var i = 0; i < actionButtons.length; i++) {
 						actionButtons[i].style.backgroundImage = '';
+						actionButtons[i].classList.toggle("btn-secondary", true);
 						labels[i].style.backgroundImage = '';
 					}
 					
@@ -253,6 +254,12 @@ function connect(url) {
 								label.style.backgroundImage = 'url(data:image/gif;base64,' + this.buttons[i].LabelBase64 + ')';
 							}
 						}
+
+						button.classList.toggle("btn-secondary", !this.buttons[i].BackgroundColorHex);
+
+						if (this.buttons[i].BackgroundColorHex) {
+							button.style.backgroundColor = this.buttons[i].BackgroundColorHex;
+						}
 					}
 					autoSize();
 					break;
@@ -290,6 +297,12 @@ function connect(url) {
 							button.style.backgroundImage = 'url(data:image/gif;base64,' + obj.Buttons[0].IconBase64 + ')';
 						} else {
 							button.style.backgroundImage = '';
+						}
+
+						button.classList.toggle("btn-secondary", !obj.Buttons[0].BackgroundColorHex);
+
+						if (obj.Buttons[0].BackgroundColorHex) {
+							button.style.backgroundColor = obj.Buttons[0].BackgroundColorHex;
 						}
 					}
 					
@@ -334,7 +347,6 @@ function connect(url) {
 }
 
 function generateGrid(columns, rows) {
-	var maxButtons = columns*rows;
 	var buttonContainer = document.getElementById("button-container");
 	buttonContainer.innerHTML = "";
 	
@@ -348,9 +360,8 @@ function generateGrid(columns, rows) {
 			column.setAttribute("id", "col_" + i + "_" + j);
 			column.classList.add("col");
 			column.classList.add("blockBox");
-			var button = document.createElement("button");
+			var button = document.createElement("div");
 			button.classList.add("action-button");
-			button.classList.add("btn");
 			button.classList.toggle("btn-secondary", buttonBackground);
 			button.setAttribute("id", i + "_" + j);
 			

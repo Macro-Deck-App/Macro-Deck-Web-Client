@@ -10,3 +10,5 @@ The Macro Deck Web Client is compatible with almost all browsers that support th
 # Third party licenses
 This app uses some awesome 3rd party libraries:
 - [URLSearchParams Polyfill (MIT license)](https://github.com/jerrybendy/url-search-params-polyfill)
+- [Bootstrap (MIT license)](https://github.com/twbs/bootstrap)
+- [NoSleep.js (MIT license)](https://github.com/richtr/NoSleep.js/)

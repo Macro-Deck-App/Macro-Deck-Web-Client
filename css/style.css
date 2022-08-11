@@ -3,16 +3,23 @@ body {
 }
 
 
-p, h1, h2, h3, h4, h5, h6, label {
-	color: white;
+
+
+.bg-dark p, .bg-dark h1, .bg-dark h2, .bg-dark h3, .bg-dark h4, .bg-dark h5, .bg-dark h6, .bg-dark label, .bg-dark .text-w {
+	color: white !important;
+}
+
+p, h1, h2, h3, h4, h5, h6, label , .text-w
+ {
+    color: black;
 }
 
 .pressed {
-	transform: scale(0.9);
+    transform: scale(0.9);
 }
 
 .release-transition {
-	transition: all .3s linear;
+    transition: all .3s linear;
 }
 
 .blockBox {
@@ -23,7 +30,11 @@ p, h1, h2, h3, h4, h5, h6, label {
 	background-color: #2d2d2d!important;
 }
 
-.btn-secondary {
+.btn-secondary{
+    background-color: #eeeeee !important;
+}
+ 
+.bg-dark .btn-secondary {
 	background-color: #232323!important;
 }
 
@@ -57,13 +68,14 @@ p, h1, h2, h3, h4, h5, h6, label {
     transform: translate(-50%, -50%); 
 }
 
+
 .connect-container {
 	margin: auto;
 	height: auto;
 }
 
 .recent-connection-item {
-	background-color: #353535;
+	background-color: #fff;
 	padding: 10px 10px 10px 10px;
 	margin: 10px 10px 10px 10px;
 	border: 1px solid rgb(90, 90, 90);
@@ -73,9 +85,19 @@ p, h1, h2, h3, h4, h5, h6, label {
 	margin: auto;
 }
 
-.recent-connection-item:hover {
-	background-color: #454545;
+
+.bg-dark .recent-connection-item {
+	background-color: #353535;
+}
+
+
+ .recent-connection-item:hover { 
 	cursor: pointer;
+	background-color: #ccc; 
+}
+
+.bg-dark .recent-connection-item:hover {
+	background-color: #454545; 
 }
 
 .form-connect {

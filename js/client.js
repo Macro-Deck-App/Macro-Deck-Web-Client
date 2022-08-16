@@ -49,19 +49,6 @@ function openFullscreen() {
 	}
 }
 
-$( window ).resize(function() {
-	if (!document.fullscreenElement) {
-		if (connected) {
-			document.getElementById("btn-back").classList.toggle("d-none", false);
-		}
-		document.getElementById("btn-fullscreen").classList.toggle("d-none", false);
-	} else {
-		document.getElementById("btn-back").classList.toggle("d-none", true);
-		document.getElementById("btn-fullscreen").classList.toggle("d-none", true);
-	}
-	autoSize();
-});
-
 $(document).ready(function () {	
 	$('form[name="connect"]').on("submit", function (e) {
 		e.preventDefault();

@@ -404,9 +404,6 @@ function autoSize() {
 	var btnFullscreen = document.getElementById("btn-fullscreen");
 
 	var offset = 0;
-	if (!document.fullscreenElement) {
-		offset = 30 + btnFullscreen.offsetHeight * 2;
-	}
 
 	var buttonSize = 100;
     var rowsCount = rows.length;

@@ -16,7 +16,7 @@ var supportButtonReleaseLongPress = false;
 var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.4.1";
+var version = "2.5.0";
 
 function back() {
 	disconnect();
@@ -49,14 +49,30 @@ function openFullscreen() {
 	}
 }
 
+var dark = true;
+function toggleDark() {
+    dark = !dark;
+    document.getElementById("body").classList.toggle("bg-dark");
+    if (dark) {
+        document.getElementById("btn-dark").innerText = "Light";
+        document.getElementById("logo").setAttribute("src","images/logo.png" );
+
+    } else {
+        document.getElementById("btn-dark").innerText = "Dark";
+        document.getElementById("logo").setAttribute("src","images/logo2.png" );
+    }
+} 
+
 $( window ).resize(function() {
 	if (!document.fullscreenElement) {
 		if (connected) {
 			document.getElementById("btn-back").classList.toggle("d-none", false);
 		}
 		document.getElementById("btn-fullscreen").classList.toggle("d-none", false);
+		document.getElementById("btn-dark").classList.toggle("d-none", false);
 	} else {
 		document.getElementById("btn-back").classList.toggle("d-none", true);
+		document.getElementById("btn-dark").classList.toggle("d-none", true);
 		document.getElementById("btn-fullscreen").classList.toggle("d-none", true);
 	}
 	autoSize();

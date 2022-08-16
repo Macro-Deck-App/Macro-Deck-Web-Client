@@ -16,7 +16,7 @@ var supportButtonReleaseLongPress = false;
 var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.4.1";
+var version = "2.5.0";
 
 function back() {
 	disconnect();

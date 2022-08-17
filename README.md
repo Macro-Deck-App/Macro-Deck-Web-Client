@@ -1,4 +1,4 @@
-# Macro Deck Web Client Program for Macro Deck 2
+# Macro Deck Web Client Application for Macro Deck 2
 
 <img height="64px" src="https://macrodeck.org/images/works_with_macrodeck2.png" />
 

@@ -16,7 +16,7 @@ var supportButtonReleaseLongPress = false;
 var buttonsGenerated = false;
 
 var apiVersion = 20;
-var version = "2.5.0";
+var version = "2.5.1";
 
 function back() {
 	disconnect();
@@ -271,7 +271,7 @@ function connect(url) {
 							}
 						}
 
-						if (this.buttons[i].BackgroundColorHex) {
+						if (button && this.buttons[i].BackgroundColorHex) {
 							button.classList.toggle("btn-secondary", !this.buttons[i].BackgroundColorHex);
 							button.style.backgroundColor = this.buttons[i].BackgroundColorHex;
 						}
@@ -315,7 +315,7 @@ function connect(url) {
 						}
 
 
-						if (obj.Buttons[0].BackgroundColorHex) {
+						if (button && obj.Buttons[0].BackgroundColorHex) {
 							button.classList.toggle("btn-secondary", !obj.Buttons[0].BackgroundColorHex);
 							button.style.backgroundColor = obj.Buttons[0].BackgroundColorHex;
 						}

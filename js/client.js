@@ -154,11 +154,7 @@ $(document).ready(function () {
     ? "light"
     : "dark");
   if (storedTheme === "light") {
-    dark = false;
-    localStorage.setItem("theme", "light");
-    document.getElementById("btn-dark").innerText = "Dark";
-    document.getElementById("body").classList.toggle("bg-dark");
-    document.getElementById("logo").setAttribute("src","images/logo2.png" );
+    toggleDark()
   }
 });
 

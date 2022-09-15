@@ -56,10 +56,11 @@ function toggleDark() {
     if (dark) {
         document.getElementById("btn-dark").innerText = "Light";
         document.getElementById("logo").setAttribute("src","images/logo.png" );
-
+        localStorage.setItem("theme", "dark");
     } else {
         document.getElementById("btn-dark").innerText = "Dark";
         document.getElementById("logo").setAttribute("src","images/logo2.png" );
+        localStorage.setItem("theme", "light");
     }
 } 
 
@@ -146,6 +147,19 @@ $(document).ready(function () {
 			document.getElementById("recent-connections").appendChild(recentConnectionItemRow);
 		}
 	}
+
+  var storedTheme =
+  localStorage.getItem("theme") ||
+  (window.matchMedia("(prefers-color-scheme: light)").matches
+    ? "light"
+    : "dark");
+  if (storedTheme === "light") {
+    dark = false;
+    localStorage.setItem("theme", "light");
+    document.getElementById("btn-dark").innerText = "Dark";
+    document.getElementById("body").classList.toggle("bg-dark");
+    document.getElementById("logo").setAttribute("src","images/logo2.png" );
+  }
 });
 
 function connect(url) {

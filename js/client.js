@@ -18,6 +18,53 @@ var buttonsGenerated = false;
 var apiVersion = 20;
 var version = "2.5.1";
 
+
+var myKeyMap = new Map();
+function loadKeyMap(str){
+    var lines = str.replace(/\\,/gm,'Comma').split("\n");
+    for (var i=0;i<lines.length;i++){
+        var keys = lines[i].split(",");
+        for(var j=0;j<keys.length;j++){
+            let key = keys[j].trim();
+
+            if(key.length>0){
+                if(key=='Comma'){
+                    key = ',';
+                }
+                let id = "" + i + "_" + j;
+                myKeyMap.set(key, id);
+            }
+        }
+    }
+}
+
+document.addEventListener('keydown', (event) => {
+    var keyValue = event.key;
+    // var codeValue = event.code;
+    // console.log("keyValue: " + keyValue + ", codeValue: " + codeValue);
+    if (myKeyMap.has(keyValue)) {
+        let id = myKeyMap.get(keyValue);
+        // console.log("label: " + id);
+        if (buttonPress(id)){
+            event.preventDefault();
+        }
+    }
+
+}, false);
+
+
+
+document.addEventListener('keyUp', (event) => {
+    var keyValue = event.key;
+    if (myKeyMap.has(keyValue)) {
+        let id = myKeyMap.get(keyValue);
+        if (buttonPressRelease(id)){
+            event.preventDefault();
+        }
+    }
+
+}, false);
+
 function back() {
 	disconnect();
 	window.location.reload(false); 
@@ -83,9 +130,24 @@ $(document).ready(function () {
 		e.preventDefault();
 		var host = $(this).find('input[name="inputHost"]');
 		var port = $(this).find('input[name="inputPort"]');
-		
-		connect("ws://" + host.val() + ":" + port.val() + "/");
+		var mykeyboard =  $(this).find('textarea[name="keyboardLayout"]').val();
+        setCookie("mykeyboard",mykeyboard.replaceAll("\n","\\n"));
+		loadKeyMap(mykeyboard);
+        connect("ws://" + host.val() + ":" + port.val() + "/");
 	});
+
+
+    var textarea = document.getElementById("keyboardLayout");
+    textarea.addEventListener('input', (e) => {
+        textarea.style.height = '10px';
+        textarea.style.height = e.target.scrollHeight + 'px';
+    });
+    
+	if (getCookie("mykeyboard")) {
+		mykeyboard = getCookie("mykeyboard").replaceAll("\\n","\n");
+        textarea.textContent = mykeyboard;
+	}
+
 	
 	if (getCookie("clientId")) {
 		clientId = getCookie("clientId");
@@ -509,9 +571,13 @@ function buttonPress(id) {
 	if (document.getElementById("col_" + id)) {
 		document.getElementById("col_" + id).classList.toggle('pressed', true);
 		document.getElementById("col_" + id).classList.toggle('release-transition', false);
-	}
-	var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_PRESS }
-	doSend(JSON.stringify(jsonObj));
+        var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_PRESS }
+        doSend(JSON.stringify(jsonObj));
+        return true;
+    } else {
+        console.log("Error: buttonPress(), id=" + id);
+    }
+    return false;
 }
 
 function buttonPressRelease(id) {
@@ -519,15 +585,19 @@ function buttonPressRelease(id) {
 	if (document.getElementById("col_" + id)) {
 		document.getElementById("col_" + id).classList.toggle('pressed', false);
 		document.getElementById("col_" + id).classList.toggle('release-transition', true);
-	}
+        var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_RELEASE }
+        if (longPress) {
+            jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_LONG_PRESS_RELEASE }
+        }
+        if (supportButtonReleaseLongPress) {
+            doSend(JSON.stringify(jsonObj));
+            return true;
+        }
+	}else {
+        console.log("Error: buttonPressRelease(), id=" + id);
+    }
+    return false;
 
-	var jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_RELEASE }
-	if (longPress) {
-		jsonObj = { "Message" : id, "Method" : JsonMethod.BUTTON_LONG_PRESS_RELEASE }
-	}
-	if (supportButtonReleaseLongPress) {
-		doSend(JSON.stringify(jsonObj));
-	}
 }
 
 

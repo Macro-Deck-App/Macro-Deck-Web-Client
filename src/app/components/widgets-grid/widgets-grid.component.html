@@ -1,0 +1,9 @@
+<div #widgetsWrapper class="widgets-wrapper" (resized)="onResized($event)">
+  <div [ngStyle]="getWidgetStyle(widgetIndex)" *ngFor="let totalWidgetsCount of [].constructor(countTotalWidgets()); let widgetIndex = index" class="widget">
+    <div (down)="onMouseDown($event, widgetIndex)" (up)="onMouseUp($event, widgetIndex)" [ngStyle]="getWidgetContentStyle(widgetIndex)" class="widget-content-wrapper">
+      <div class="widget-content">
+        <app-widget-actionbutton [actionButton]="getActionButtonFromIndex(widgetIndex)"></app-widget-actionbutton>
+      </div>
+    </div>
+  </div>
+</div>

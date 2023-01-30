@@ -1,0 +1,5 @@
+<div class="app">
+  <app-toolbar></app-toolbar>
+  <app-widgets-grid *ngIf="connected" class="content"></app-widgets-grid>
+  <app-connect *ngIf="!connected" class="content"></app-connect>
+</div>

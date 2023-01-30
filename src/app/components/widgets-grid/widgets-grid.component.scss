@@ -1,0 +1,54 @@
+.widgets-wrapper {
+  width: inherit;
+  height: inherit;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.widget {
+  display: flex;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.widget-content-wrapper {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  transition: all .2s ease-out;
+}
+
+.widget-content-wrapper.active {
+  top: 6px;
+  bottom: -6px;
+  box-shadow: 0 3px 0 rgb(31, 31, 31),0px 3px 6px rgba(0, 0, 0, .7)!important;
+}
+
+.widget-content-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 1s ease-out;
+  opacity: 0;
+  background-color: white;
+}
+
+.widget-content-wrapper.active::after {
+  opacity: .3;
+}
+
+
+.widget-content {
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  display: block;
+}

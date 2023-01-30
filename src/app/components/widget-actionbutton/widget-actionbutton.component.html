@@ -1,0 +1,4 @@
+<div class="actionbutton-container" [style.background]="actionButton?.BackgroundColorHex">
+  <img class="icon-img" *ngIf="actionButton?.IconBase64 !== ''" [src]="'data:image/gif;base64,' + actionButton?.IconBase64" />
+  <img class="label-img" *ngIf="actionButton?.LabelBase64 !== ''" [src]="'data:image/gif;base64,' + actionButton?.LabelBase64" />
+</div>

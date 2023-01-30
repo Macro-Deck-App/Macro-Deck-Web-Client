@@ -1,0 +1,20 @@
+<mat-toolbar [matMenuTriggerFor]="menu" class="toolbar">
+  <button mat-icon-button>
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <span>Macro Deck</span>
+</mat-toolbar>
+<mat-menu #menu="matMenu" class="menu">
+  <button mat-menu-item>
+    <mat-icon>fullscreen</mat-icon>
+    <span>Fullscreen</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>tune</mat-icon>
+    <span>Settings</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>close</mat-icon>
+    <span>Disconnect</span>
+  </button>
+</mat-menu>

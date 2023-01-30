@@ -1,0 +1,45 @@
+<p class="h5">Add a connection</p>
+<div mat-dialog-content>
+  <form>
+    <p>
+      <mat-form-field>
+        <mat-label>Display name</mat-label>
+        <input type="text" matInput [formControl]="nameFormControl" [errorStateMatcher]="matcher"
+              placeholder="Eg. My gaming computer">
+        <mat-hint>Enter a unique name</mat-hint>
+        <mat-error *ngIf="nameFormControl.hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </p>
+    <div class="row">
+      <div class="col-auto">
+        <mat-form-field>
+          <mat-label>Host</mat-label>
+          <input type="text" matInput [formControl]="hostFormControl" [errorStateMatcher]="matcher"
+                placeholder="xxx.xxx.xxx.xxx">
+          <mat-hint>Can be a IP address or hostname</mat-hint>
+          <mat-error *ngIf="hostFormControl.hasError('required')">
+            Host is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+          <mat-form-field style="width: 60pt;">
+          <mat-label>Port</mat-label>
+          <input type="number" matInput [formControl]="portFormControl" [errorStateMatcher]="matcher"
+                placeholder="8191">
+          <mat-error *ngIf="portFormControl.hasError('required')">
+            Port is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>
+<mat-dialog-actions>
+  <button (click)="save()" [disabled]="nameFormControl.hasError('required') ||
+                      hostFormControl.hasError('required') ||
+                      portFormControl.hasError('required')" mat-raised-button color="primary">Ok</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

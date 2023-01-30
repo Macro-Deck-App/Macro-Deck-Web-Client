@@ -1,0 +1,19 @@
+* {
+  color: white;
+}
+
+.connections-card {
+  max-width: 500px;
+  width: 100%;
+}
+
+.connection-item {
+  display: block;
+  background-color: #202020;
+  border-radius: 4px;
+}
+
+.connections-list {
+  overflow-y: auto;
+  overflow-x: hidden;
+}

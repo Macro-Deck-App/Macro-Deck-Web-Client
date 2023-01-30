@@ -1,0 +1,46 @@
+<div style="height: 100%;" class="w-100 m-auto d-flex justify-content-center align-items-center">
+  <mat-card class="connections-card">
+    <mat-card-header>
+      <mat-card-title>Connections</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content *ngIf="!connecting" class="d-flex justify-content-center align-items-center p-2 m-0">
+      <p *ngIf="connections.length == 0"><span class="h6">No connections configured.</span><br>
+      Click the button bellow to add a connection.</p>
+      <div *ngIf="connections.length > 0" class="w-100 mt-3 mb-3">
+        <div class="w-100 connections-list">
+          <a href="javascript:void(0)" style="text-decoration: none;" *ngFor="let connection of connections" class="connection-item  p-0 mb-1">
+            <div class="row">
+              <div matRipple [matRippleRadius]="80" (click)="connect(connection.id)"  class="col">
+                <p class="h6 m-0 ps-3 pt-2">{{connection.displayName}}</p>
+                <p class="opacity-75 m-0 ps-3 pb-2">{{connection.ipAddress}}:{{connection.port}}</p>
+              </div>
+              <div class="col col-auto align-items-center">
+                <div style="height: 100%; display: flex; align-items: center;">
+                  <button mat-icon-button [matMenuTriggerFor]="connectionItemMenu" [matMenuTriggerData]="connection">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+    <div *ngIf="connecting" class="w-100 d-flex justify-content-center justify-items-center">
+      <div class="p-2 text-center">
+        <mat-spinner class="mb-2"></mat-spinner>
+        <p>Connecting...</p>
+      </div>
+    </div>
+    <mat-card-actions class="d-flex align-items-center p-0">
+      <button [disabled]="connecting" (click)="openAddConnectionDialog()" mat-raised-button color="primary"><mat-icon>add</mat-icon>Add connection</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+<mat-menu #connectionItemMenu="matMenu" class="menu">
+  <ng-template matMenuContent let-id="id">
+    <button mat-menu-item (click)="editConnection(id)">Edit</button>
+    <button mat-menu-item (click)="deleteConnection(id)">Delete</button>
+  </ng-template>
+</mat-menu>

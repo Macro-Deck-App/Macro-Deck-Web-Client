@@ -160,5 +160,10 @@
 		<script src="js/bootstrap.js"></script>
 		<script src="js/client.js"></script>
 		<script src="js/cookiealert.js"></script>
+		<script>
+			if ('serviceWorker' in navigator) {
+				navigator.serviceWorker.register('/js/serviceWorker.js')
+			}
+		</script>
 	</body>
 </html>
